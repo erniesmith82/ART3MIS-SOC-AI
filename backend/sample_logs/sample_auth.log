@@ -1,0 +1,8 @@
+May 08 10:12:44 server sshd[1182]: Failed password for invalid user admin from 185.22.14.91 port 55221 ssh2
+May 08 10:12:51 server sshd[1183]: Failed password for root from 185.22.14.91 port 55222 ssh2
+May 08 10:13:03 server sshd[1184]: Failed password for invalid user test from 185.22.14.91 port 55223 ssh2
+May 08 10:14:07 server sshd[1185]: Failed password for invalid user oracle from 185.22.14.91 port 55224 ssh2
+May 08 10:15:44 server sshd[1190]: Accepted password for ernie from 192.168.1.25 port 50501 ssh2
+May 08 10:20:15 web nginx: GET /login.php?id=1' OR '1'='1 from 91.200.12.77
+May 08 10:21:02 web nginx: GET /../../../../etc/passwd from 44.12.93.5
+May 08 10:25:11 app auth: unauthorized access denied for user guest from 72.44.18.9
