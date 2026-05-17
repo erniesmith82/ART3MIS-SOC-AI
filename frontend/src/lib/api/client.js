@@ -1,8 +1,8 @@
 const API_BASE =
-	typeof window === 'undefined'
+	import.meta.env.VITE_API_BASE_URL ||
+	(typeof window === 'undefined'
 		? 'http://backend:8000'
-		: 'http://127.0.0.1:8000';
-
+		: 'http://127.0.0.1:8000');
 
 function getAuthHeaders() {
 	const token = localStorage.getItem('token');

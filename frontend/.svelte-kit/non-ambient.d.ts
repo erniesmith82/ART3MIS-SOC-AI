@@ -43,6 +43,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/dashboard" | "/login" | `/reports/${string}` & {} | "/upload";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): string & {};
+		Asset(): "/images/art3mis_soc.png" | string & {};
 	}
 }

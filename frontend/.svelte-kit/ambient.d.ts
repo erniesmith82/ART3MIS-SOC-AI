@@ -60,8 +60,6 @@ declare module '$env/static/private' {
 	export const LOGONSERVER: string;
 	export const NODE: string;
 	export const NODE_ENV: string;
-	export const NODE_EXE: string;
-	export const NPM_CLI_JS: string;
 	export const npm_command: string;
 	export const npm_config_cache: string;
 	export const npm_config_globalconfig: string;
@@ -79,8 +77,6 @@ declare module '$env/static/private' {
 	export const npm_lifecycle_script: string;
 	export const npm_node_execpath: string;
 	export const npm_package_json: string;
-	export const NPM_PREFIX_JS: string;
-	export const NPM_PREFIX_NPM_CLI_JS: string;
 	export const NUMBER_OF_PROCESSORS: string;
 	export const NVVFX_MODEL_DIR: string;
 	export const OneDrive: string;
@@ -111,15 +107,13 @@ declare module '$env/static/private' {
 	export const TMP: string;
 	export const USERDOMAIN_ROAMINGPROFILE: string;
 	export const USERPROFILE: string;
-	export const VSCODE_A11Y_MODE: string;
 	export const VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const VSCODE_INJECTION: string;
-	export const VSCODE_NONCE: string;
-	export const VSCODE_STABLE: string;
+	export const VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
 	export const windir: string;
 	export const ZES_ENABLE_SYSMAN: string;
 }
@@ -230,8 +224,6 @@ declare module '$env/dynamic/private' {
 		LOGONSERVER: string;
 		NODE: string;
 		NODE_ENV: string;
-		NODE_EXE: string;
-		NPM_CLI_JS: string;
 		npm_command: string;
 		npm_config_cache: string;
 		npm_config_globalconfig: string;
@@ -249,8 +241,6 @@ declare module '$env/dynamic/private' {
 		npm_lifecycle_script: string;
 		npm_node_execpath: string;
 		npm_package_json: string;
-		NPM_PREFIX_JS: string;
-		NPM_PREFIX_NPM_CLI_JS: string;
 		NUMBER_OF_PROCESSORS: string;
 		NVVFX_MODEL_DIR: string;
 		OneDrive: string;
@@ -281,15 +271,13 @@ declare module '$env/dynamic/private' {
 		TMP: string;
 		USERDOMAIN_ROAMINGPROFILE: string;
 		USERPROFILE: string;
-		VSCODE_A11Y_MODE: string;
 		VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		VSCODE_GIT_IPC_HANDLE: string;
 		VSCODE_INJECTION: string;
-		VSCODE_NONCE: string;
-		VSCODE_STABLE: string;
+		VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
 		windir: string;
 		ZES_ENABLE_SYSMAN: string;
 		[key: `PUBLIC_${string}`]: undefined;
