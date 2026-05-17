@@ -778,8 +778,6 @@ function batch(validate_or_fn, maybe_fn) {
 	const fn = maybe_fn ?? validate_or_fn;
 	/** @type {(arg?: any) => MaybePromise<Input>} */
 	const validate = create_validator(validate_or_fn, maybe_fn);
-	/** @type {Map<string, { get_validated: () => MaybePromise<any>, resolvers: Array<{resolve: (value: any) => void, reject: (error: any) => void}> }>} */
-	let batching = /* @__PURE__ */ new Map();
 	/**
 	* Enqueues a single call into the current batch (creating one if necessary)
 	* and returns a promise that resolves with the result for this entry.
@@ -791,7 +789,13 @@ function batch(validate_or_fn, maybe_fn) {
 	const enqueue = (payload, get_validated) => {
 		const { event, state } = get_request_store();
 		return new Promise((resolve, reject) => {
-			const entry = batching.get(payload);
+			const batches = state.remote.batches ??= /* @__PURE__ */ new Map();
+			let batched = batches.get(__.id);
+			if (!batched) {
+				batched = /* @__PURE__ */ new Map();
+				batches.set(__.id, batched);
+			}
+			const entry = batched.get(payload);
 			if (entry) {
 				entry.resolvers.push({
 					resolve,
@@ -799,17 +803,16 @@ function batch(validate_or_fn, maybe_fn) {
 				});
 				return;
 			}
-			batching.set(payload, {
+			batched.set(payload, {
 				get_validated,
 				resolvers: [{
 					resolve,
 					reject
 				}]
 			});
-			if (batching.size > 1) return;
+			if (batched.size > 1) return;
 			setTimeout(async () => {
-				const batched = batching;
-				batching = /* @__PURE__ */ new Map();
+				batches.delete(__.id);
 				const entries = Array.from(batched.values());
 				try {
 					return await run_remote_function(event, state, false, async () => Promise.all(entries.map((entry) => entry.get_validated())), async (input) => {
@@ -908,6 +911,8 @@ function create_query_resource(__, payload, state, fn) {
 			return false;
 		},
 		refresh() {
+			const { event } = get_request_store();
+			if (!event.isRemoteRequest) return Promise.resolve();
 			const refresh_context = get_refresh_context(__, "refresh", payload);
 			const is_immediate_refresh = !refresh_context.cache[refresh_context.payload];
 			return update_refresh_value(refresh_context, is_immediate_refresh ? get_promise() : fn(), is_immediate_refresh);

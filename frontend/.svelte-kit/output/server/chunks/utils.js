@@ -403,11 +403,27 @@ function deep_get(object, path) {
 	return current;
 }
 /**
+*
+* @param {string} field_type
+* @param {boolean} is_array
+* @param {unknown} input_value
+*/
+function get_type_prefix(field_type, is_array, input_value) {
+	if (field_type === "number" || field_type === "range") return "n:";
+	if (field_type === "checkbox" && !is_array) return "b:";
+	if (field_type === "hidden" || field_type === "submit") {
+		const input_type = typeof input_value;
+		if (input_type === "number") return "n:";
+		if (input_type === "boolean") return "b:";
+	}
+	return "";
+}
+/**
 * Creates a proxy-based field accessor for form data
 * @param {any} target - Function or empty POJO
 * @param {() => Record<string, any>} get_input - Function to get current input data
 * @param {(path: (string | number)[], value: any) => void} set_input - Function to set input data
-* @param {() => Record<string, InternalRemoteFormIssue[]>} get_issues - Function to get current issues
+* @param {(path?: (string | number)[], all?: boolean) => Record<string, InternalRemoteFormIssue[]>} get_issues - Function to get current issues
 * @param {(string | number)[]} path - Current access path
 * @returns {any} Proxy object with name(), value(), and issues() methods
 */
@@ -429,7 +445,7 @@ function create_field_proxy(target, get_input, set_input, get_issues, path = [])
 		if (prop === "value") return create_field_proxy(get_value, get_input, set_input, get_issues, [...path, prop]);
 		if (prop === "issues" || prop === "allIssues") {
 			const issues_func = () => {
-				const all_issues = get_issues()[key === "" ? "$" : key];
+				const all_issues = get_issues(path, prop === "allIssues")[key === "" ? "$" : key];
 				if (prop === "allIssues") return all_issues?.map((issue) => ({
 					path: issue.path,
 					message: issue.message
@@ -450,7 +466,7 @@ function create_field_proxy(target, get_input, set_input, get_issues, path = [])
 				const is_array = type === "file multiple" || type === "select multiple" || type === "checkbox" && typeof input_value === "string";
 				/** @type {Record<string, any>} */
 				const base_props = {
-					name: (type === "number" || type === "range" ? "n:" : type === "checkbox" && !is_array ? "b:" : "") + key + (is_array ? "[]" : ""),
+					name: get_type_prefix(type, is_array, input_value) + key + (is_array ? "[]" : ""),
 					get "aria-invalid"() {
 						return key in get_issues() ? "true" : void 0;
 					}

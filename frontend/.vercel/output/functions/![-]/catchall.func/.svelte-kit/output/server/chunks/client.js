@@ -459,7 +459,7 @@ async function initialize(result, target, hydrate) {
 	};
 	const style = document.querySelector("style[data-sveltekit]");
 	if (style) style.remove();
-	Object.assign(page, result.props.page);
+	update(result.props.page);
 	root = new app.root({
 		target,
 		props: {
@@ -1188,6 +1188,11 @@ async function navigate({ type, url, popped, keepfocus, noscroll, replace_state,
 	await commit_promise;
 	await tick$1();
 	await tick$1();
+	if (token !== nav_token) {
+		nav.reject(/* @__PURE__ */ new Error("navigation aborted"));
+		return false;
+	}
+	if (navigation_result.props.page && rendering_error) Object.assign(navigation_result.props.page, rendering_error);
 	/** @type {Element | null | ''} */
 	let deep_linked = null;
 	if (autoscroll) {
@@ -1199,10 +1204,6 @@ async function navigate({ type, url, popped, keepfocus, noscroll, replace_state,
 	const changed_focus = document.activeElement !== activeElement && document.activeElement !== document.body;
 	if (!keepfocus && !changed_focus) reset_focus(url, !deep_linked);
 	autoscroll = true;
-	if (navigation_result.props.page) {
-		if (rendering_error) Object.assign(navigation_result.props.page, rendering_error);
-		Object.assign(page, navigation_result.props.page);
-	}
 	is_navigating = false;
 	if (type === "popstate") restore_snapshot(current_navigation_index);
 	nav.fulfil(void 0);
