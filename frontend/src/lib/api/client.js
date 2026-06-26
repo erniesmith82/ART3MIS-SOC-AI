@@ -1,5 +1,6 @@
 const API_BASE =
 	import.meta.env.VITE_API_BASE_URL ||
+	import.meta.env.PUBLIC_API_URL ||
 	(typeof window === 'undefined'
 		? 'http://backend:8000'
 		: 'http://127.0.0.1:8000');
