@@ -31,7 +31,7 @@ from app.schemas import (
 app = FastAPI(
     title="ART3MIS SOC AI API",
     description="AI-assisted cybersecurity log analysis backend.",
-    version="0.5.3",
+    version="0.5.4",
 )
 
 app.add_middleware(
@@ -41,6 +41,8 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "https://art-3-mis-soc-ai.vercel.app",
+        "https://art3mis-soc-ai.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -51,6 +53,14 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     init_db()
+
+
+@app.get("/")
+def root():
+    return {
+        "status": "online",
+        "service": "ART3MIS SOC AI API",
+    }
 
 
 @app.get("/health")
@@ -155,15 +165,10 @@ async def upload_log(
         ".csv"
     )
 
-    if not file.filename.lower().endswith(
-        allowed_extensions
-    ):
+    if not file.filename.lower().endswith(allowed_extensions):
         raise HTTPException(
             status_code=400,
-            detail=(
-                "Unsupported file type. "
-                "Upload .txt, .log, or .csv files."
-            ),
+            detail="Unsupported file type. Upload .txt, .log, or .csv files.",
         )
 
     raw = await file.read()
